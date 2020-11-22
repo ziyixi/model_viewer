@@ -1,0 +1,23 @@
+name: model_viewer
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - flask
+  - autopep8
+  - numpy
+  - packaging
+  - netcdf4
+  - gmt
+  - pandas
+  - xarray
+  - pip
+  - pygmt
+  - ipython
+  - shapely
+  - flask-restful
+  - loguru
+  - gunicorn
+prefix: /Users/ziyixi/anaconda3/envs/model_viewer
+
