@@ -1,7 +1,7 @@
 import numpy as np
 import pyproj
-from scipy.spatial import KDTree
 from scipy.interpolate import RegularGridInterpolator
+from scipy.spatial import KDTree
 
 
 def gmt_project(startlon, startlat, endlon, endlat, thetype, npts=1001):

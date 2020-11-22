@@ -1,17 +1,14 @@
-import pygmt
 import numpy as np
-import xarray as xr
+import pygmt
 import xarray
+import xarray as xr
 from shapely.geometry import Point, Polygon
+
 from pyapp.utils import get_data, get_figures
 
 
 def gmt_get_data(name):
     return f'"{get_data(name)}"'
-
-
-def gmt_get_figures(name):
-    return f'"{get_figures(name)}"'
 
 
 def plot_map(startlon, startlat, endlon, endlat, filename):
@@ -166,8 +163,4 @@ def plot_map(startlon, startlat, endlon, endlat, filename):
                     frame=["wsen", "xaf", "yaf"])
     # * a bug in pygmt when containing space, this func can only be called from the base
     fig.savefig(f"./pyapp/map/figures/{filename}.png")
-<<<<<<< HEAD
     return f"{filename}.png"
-=======
-    return get_figures(f"{filename}.png")
->>>>>>> ad41d35aacd6fa4439560240c2ac0dbb46a01991

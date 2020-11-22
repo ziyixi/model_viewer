@@ -19,5 +19,8 @@ dependencies:
   - flask-restful
   - loguru
   - gunicorn
+  - pyproj
+  - scipy
+  - obspy
 prefix: /Users/ziyixi/anaconda3/envs/model_viewer
 

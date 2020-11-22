@@ -43,7 +43,8 @@ export default {
   },
 
   publicRuntimeConfig: {
-    mapServer:'http://127.0.0.1:5000/map?filename='
+    mapServer: 'http://127.0.0.1:5000/map?filename=',
+    vcServer:'http://127.0.0.1:5000/vc?filename='
   },
   axios: {
     // extra config e.g
@@ -54,6 +55,7 @@ export default {
   },
   proxy: {
     // '/map': 'http://149.28.115.10:5000'
-    '/map': 'http://127.0.0.1:5000'
+    '/map': 'http://127.0.0.1:5000',
+    '/vc': 'http://127.0.0.1:5000',
   },
 }
