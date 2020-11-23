@@ -116,7 +116,7 @@
             <!-- vc form  -->
             <el-card>
               <div slot="header">
-                <span> Configure vertical-cross-section plotting </span>
+                <span> Configure the vertical-cross-section's plotting </span>
               </div>
               <el-form ref="formvc" :model="formvc">
                 <el-form-item label="Parameter">
@@ -152,7 +152,7 @@
                 </el-form-item>
                 <el-form-item>
                   <div>
-                    <span>Depth for the vertical cross-section (km)</span>
+                    <span>Depth of the vertical cross-section (km)</span>
                     <el-slider
                       v-model="formvc.depth"
                       :min="100"
@@ -163,7 +163,7 @@
                     </el-slider>
                   </div>
                   <div>
-                    <span>The range of colorbar (%)</span>
+                    <span>The colorbar range (%)</span>
                     <el-slider
                       v-model="formvc.colorbar_range"
                       range
