@@ -284,7 +284,9 @@ export default {
     },
     // user defined functions
     async requestMap() {
+      // console.log(this.formmap);
       var response = await this.$axios.post("/map", this.formmap);
+      // console.log(response);
       if (response.data === null) {
         this.$message.error(
           "Please place the starting or ending point inside the simulation region (magenta box)"

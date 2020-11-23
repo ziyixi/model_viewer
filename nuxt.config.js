@@ -1,6 +1,6 @@
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
-  target: 'static',
+  target: 'server',
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -43,8 +43,8 @@ export default {
   },
 
   publicRuntimeConfig: {
-    mapServer: 'http://127.0.0.1:5000/map?filename=',
-    vcServer:'http://127.0.0.1:5000/vc?filename='
+    mapServer: process.env.AXIOS_SERVER+'/map?filename=',
+    vcServer:process.env.AXIOS_SERVER+'/vc?filename='
   },
   axios: {
     // extra config e.g
@@ -55,7 +55,7 @@ export default {
   },
   proxy: {
     // '/map': 'http://149.28.115.10:5000'
-    '/map': 'http://127.0.0.1:5000',
-    '/vc': 'http://127.0.0.1:5000',
+    '/map': process.env.AXIOS_SERVER,
+    '/vc': process.env.AXIOS_SERVER,
   },
 }

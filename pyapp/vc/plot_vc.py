@@ -12,8 +12,6 @@ def gmt_get_data_vc(name):
 
 
 def plot_vc(startlon, startlat, endlon, endlat, parameter, x_axis_label, depth, colorbar_range, filename):
-    print(startlon, startlat, endlon, endlat, parameter,
-          x_axis_label, depth, colorbar_range, filename)
     fig = pygmt.Figure()
     pygmt.config(FONT_LABEL="15p", MAP_LABEL_OFFSET="12p",
                  FONT_ANNOT_PRIMARY="12p", MAP_FRAME_TYPE="plain")

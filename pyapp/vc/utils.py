@@ -46,7 +46,7 @@ def model_interp(to_interp_data, lons, lats, deps):
         for ilon in range(len(lons)):
             profile_list.append([lons[ilon], lats[ilon], deps[idep]])
     model_interpolating_function = RegularGridInterpolator(
-        (to_interp_data.longitude.data, to_interp_data.latitude.data, to_interp_data.depth.data), to_interp_data.data)
+        (to_interp_data.longitude.data, to_interp_data.latitude.data, to_interp_data.depth.data), to_interp_data.data, bounds_error=False)
     interp_result = model_interpolating_function(profile_list)
     cross_section = np.zeros((len(lons), len(deps)))
 
@@ -71,7 +71,7 @@ def topo_interp(to_interp_data, lons, lats):
         profile_list.append([lons[ilon], lats[ilon]])
     # the names and the transverse might be adjusted, this is the gmt format
     grd_interpolating_function = RegularGridInterpolator(
-        (to_interp_data.lon.data, to_interp_data.lat.data), to_interp_data.data.T)
+        (to_interp_data.lon.data, to_interp_data.lat.data), to_interp_data.data.T, bounds_error=False)
 
     grd_interp_result = grd_interpolating_function(profile_list)
 
