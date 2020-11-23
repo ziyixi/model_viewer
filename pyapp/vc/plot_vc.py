@@ -36,7 +36,7 @@ def plot_vc(startlon, startlat, endlon, endlat, parameter, x_axis_label, depth, 
     to_interp_data = data[parameter].copy()
     to_interp_data.data[to_interp_data.data > 9e6] = np.nan
     grd_topo = pygmt.datasets.load_earth_relief(
-        resolution="02m", region=[83, 155, 10, 58])
+        resolution="02m", region=[70, 170, 0, 70])
     deps = np.linspace(0, depth, 1001)
     lons, lats = gmt_project(startlon, startlat, endlon, endlat, x_axis_label)
     cross_section = model_interp(to_interp_data, lons, lats, deps)

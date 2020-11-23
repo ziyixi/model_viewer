@@ -73,6 +73,7 @@ def topo_interp(to_interp_data, lons, lats):
     grd_interpolating_function = RegularGridInterpolator(
         (to_interp_data.lon.data, to_interp_data.lat.data), to_interp_data.data.T, bounds_error=False)
 
+    np.savetxt("./test.txt", profile_list)
     grd_interp_result = grd_interpolating_function(profile_list)
 
     # * return the 1d array

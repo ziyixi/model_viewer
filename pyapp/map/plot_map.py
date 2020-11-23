@@ -1,10 +1,11 @@
 import numpy as np
 import pygmt
-import xarray
 import xarray as xr
 from shapely.geometry import Point, Polygon
 
 from pyapp.utils import get_data, get_figures
+import pyproj
+from spherical_geometry.polygon import SphericalPolygon
 
 
 def gmt_get_data(name):
@@ -16,11 +17,27 @@ def plot_map(startlon, startlat, endlon, endlat, filename):
         float, [startlon, startlat, endlon, endlat])
     # check if the points are within the simulation region
     coords = [(91.3320117152011, 9.37366242174489), (144.284491292185, 2.08633373396527),
-              (174.409435753150, 48.6744705245903), (74.6060844556399, 61.1396992149365)]
-    poly = Polygon(coords)
-    if(not poly.contains(Point(startlon, startlat))):
+              (174.409435753150, 48.6744705245903), (74.6060844556399, 61.1396992149365), (91.3320117152011, 9.37366242174489)]
+    # poly = Polygon(coords)
+    # if(not poly.contains(Point(startlon, startlat))):
+    #     return None
+    # if(not poly.contains(Point(endlon, endlat))):
+    #     return None
+    ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
+    lla = pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
+    coords_xyz = []
+    for each_coord in coords:
+        x, y, z = pyproj.transform(
+            lla, ecef, each_coord[0], each_coord[1], 0, radians=False)
+        coords_xyz.append([x, y, z])
+    start_xyz = pyproj.transform(
+        lla, ecef, startlon, startlat, 0, radians=False)
+    end_xyz = pyproj.transform(
+        lla, ecef, endlon, endlat, 0, radians=False)
+    sphr = SphericalPolygon(coords_xyz)
+    if(not sphr.contains_point(start_xyz)):
         return None
-    if(not poly.contains(Point(endlon, endlat))):
+    if(not sphr.contains_point(end_xyz)):
         return None
 
     fig = pygmt.Figure()
