@@ -12,6 +12,11 @@ def gmt_get_data_vc(name):
 
 
 def plot_vc(startlon, startlat, endlon, endlat, parameter, x_axis_label, depth, colorbar_range, filename):
+    # fix the problem of possible -R failure
+    if((x_axis_label == "lon" and startlon > endlon) or (x_axis_label == "lat" and startlat > endlat)):
+        startlon, endlon = endlon, startlon
+        startlat, endlat = endlat, startlat
+
     fig = pygmt.Figure()
     pygmt.config(FONT_LABEL="15p", MAP_LABEL_OFFSET="12p",
                  FONT_ANNOT_PRIMARY="12p", MAP_FRAME_TYPE="plain")
