@@ -45,7 +45,10 @@ class Map(Resource):
         args = parser_map_post.parse_args()
         if(args["startlon"] == None or args["startlat"] == None or args["endlon"] == None or args["endlat"] == None):
             return "typeerror"
-        ip = request.remote_addr
+        if request.headers.getlist("X-Forwarded-For"):
+            ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            ip = request.remote_addr
         thetime = f"{datetime.datetime.now():%Y-%m-%d_%H-%M-%S}"
         filename = f"{ip}-{thetime}-{args['startlon']}-{args['startlat']}-{args['endlon']}-{args['endlat']}"
         result = plot_map(args["startlon"], args["startlat"],
@@ -65,7 +68,10 @@ class Vc(Resource):
         args = parser_vc_post.parse_args()
         if(args["parameter"] == None or args["x_axis_label"] == None):
             return "typeerror"
-        ip = request.remote_addr
+        if request.headers.getlist("X-Forwarded-For"):
+            ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            ip = request.remote_addr
         thetime = f"{datetime.datetime.now():%Y-%m-%d_%H-%M-%S}"
         filename = f"{ip}-{thetime}-{args['startlon']}-{args['startlat']}-{args['endlon']}-{args['endlat']}-{args['parameter']}-{args['x_axis_label']}-{args['depth']}-{args['colorbar_range'][0]}-{args['colorbar_range'][1]}"
         result = plot_vc(args['startlon'], args['startlat'],
