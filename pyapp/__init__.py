@@ -46,7 +46,8 @@ class Map(Resource):
         if(args["startlon"] == None or args["startlat"] == None or args["endlon"] == None or args["endlat"] == None):
             return "typeerror"
         if request.headers.getlist("X-Forwarded-For"):
-            ip = request.headers.getlist("X-Forwarded-For")[0].split(",")[0]
+            ip = request.headers.getlist(
+                "X-Forwarded-For")[0].split(",")[0].rstrip()
         else:
             ip = request.remote_addr
         thetime = f"{datetime.datetime.now():%Y-%m-%d_%H-%M-%S}"
@@ -69,7 +70,8 @@ class Vc(Resource):
         if(args["parameter"] == None or args["x_axis_label"] == None):
             return "typeerror"
         if request.headers.getlist("X-Forwarded-For"):
-            ip = request.headers.getlist("X-Forwarded-For")[0].split(",")[0]
+            ip = request.headers.getlist(
+                "X-Forwarded-For")[0].split(",")[0].rstrip()
         else:
             ip = request.remote_addr
         thetime = f"{datetime.datetime.now():%Y-%m-%d_%H-%M-%S}"
