@@ -4,10 +4,13 @@ import datetime
 from flask import Flask, Response, config, request, send_file
 from flask_restful import Api, Resource, reqparse
 from loguru import logger
+from pytz import timezone
 
 from pyapp.map.plot_map import plot_map
-from pyapp.vc.plot_vc import plot_vc
 from pyapp.utils import get_figures, get_figures_vc, get_log_file
+from pyapp.vc.plot_vc import plot_vc
+
+eastern = timezone('US/Eastern')
 
 parser_map_post = reqparse.RequestParser()
 parser_map_post.add_argument('startlon', type=float)
@@ -50,7 +53,7 @@ class Map(Resource):
                 "X-Forwarded-For")[0].split(",")[0].rstrip()
         else:
             ip = request.remote_addr
-        thetime = f"{datetime.datetime.now():%Y-%m-%d_%H-%M-%S}"
+        thetime = f"{datetime.datetime.now(eastern):%Y-%m-%d_%H-%M-%S}"
         filename = f"{ip}-{thetime}-{args['startlon']}-{args['startlat']}-{args['endlon']}-{args['endlat']}"
         result = plot_map(args["startlon"], args["startlat"],
                           args["endlon"], args["endlat"], filename)
@@ -74,7 +77,7 @@ class Vc(Resource):
                 "X-Forwarded-For")[0].split(",")[0].rstrip()
         else:
             ip = request.remote_addr
-        thetime = f"{datetime.datetime.now():%Y-%m-%d_%H-%M-%S}"
+        thetime = f"{datetime.datetime.now(eastern):%Y-%m-%d_%H-%M-%S}"
         filename = f"{ip}-{thetime}-{args['startlon']}-{args['startlat']}-{args['endlon']}-{args['endlat']}-{args['parameter']}-{args['x_axis_label']}-{args['depth']}-{args['colorbar_range'][0]}-{args['colorbar_range'][1]}"
         result = plot_vc(args['startlon'], args['startlat'],
                          args['endlon'], args['endlat'], args['parameter'], args['x_axis_label'], args['depth'], args['colorbar_range'], filename)
