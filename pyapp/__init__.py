@@ -1,7 +1,7 @@
 
 import datetime
 
-from flask import Flask, Response, config, request, send_file
+from flask import Flask, Response, config, request, send_file, make_response, jsonify
 from flask_restful import Api, Resource, reqparse
 from loguru import logger
 from pytz import timezone
@@ -40,6 +40,8 @@ logger.add(get_log_file())
 class Map(Resource):
     def get(self):
         args = parser_map_get.parse_args()
+        if(args["filename"] == None):
+            return make_response(jsonify("Not Found"), 404)
         resp = Response(
             open(get_figures(args["filename"]), 'rb'), mimetype="image/png")
         return resp
