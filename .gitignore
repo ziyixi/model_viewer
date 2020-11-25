@@ -94,4 +94,5 @@ sw.*
 pyapp/map/figures/*png
 pyapp/logs/*log
 pyapp/vc/data/per_m20_ref.nc
+pyapp/vc/data/per_m00_ref.nc
 pyapp/vc/figures/*png

@@ -1,7 +1,10 @@
+import tempfile
+
 import numpy as np
 import pygmt
 import xarray as xr
 from obspy.geodetics.base import locations2degrees
+from pygmt.clib import Session
 
 from pyapp.utils import get_data_vc
 from pyapp.vc.utils import gmt_project, model_interp, topo_interp
@@ -11,7 +14,7 @@ def gmt_get_data_vc(name):
     return f'"{get_data_vc(name)}"'
 
 
-def plot_vc(startlon, startlat, endlon, endlat, parameter, x_axis_label, depth, colorbar_range, filename):
+def plot_vc(startlon, startlat, endlon, endlat, models, parameter, x_axis_label, depth, colorbar_range, threshold, filename):
     # fix the problem of possible -R failure
     if((x_axis_label == "lon" and startlon > endlon) or (x_axis_label == "lat" and startlat > endlat)):
         startlon, endlon = endlon, startlon
@@ -34,8 +37,14 @@ def plot_vc(startlon, startlat, endlon, endlat, parameter, x_axis_label, depth, 
         get_data_vc("ryu_slab2_depth.grd"))
     man = xr.open_dataset(
         get_data_vc("man_slab2_depth.grd"))
-    data = xr.open_dataset(
-        get_data_vc("per_m20_ref.nc"))
+    if(models == "eara2020"):
+        data = xr.open_dataset(
+            get_data_vc("per_m20_ref.nc"))
+    elif(models == "Initial"):
+        data = xr.open_dataset(
+            get_data_vc("per_m00_ref.nc"))
+    else:
+        raise Exception(f"not supported model {models}")
 
     # generate the file to plot
     to_interp_data = data[parameter].copy()
@@ -77,6 +86,75 @@ def plot_vc(startlon, startlat, endlon, endlat, parameter, x_axis_label, depth, 
     for interval in ["+0.02", "+0.04", "+0.06", "+0.08", "+0.1"]:
         fig.grdcontour(cross_section_xarray.T, interval=interval,
                        pen="0.5p,white", cut=300, A=interval+"+f6p+u")
+    if(threshold != 0):
+        # project the events
+        fo = tempfile.NamedTemporaryFile()
+        # use gmt project to select events
+        with Session() as lib:
+            lib.call_module(
+                module="project", args=f"{gmt_get_data_vc('ehb.txt')} -C{startlon}/{startlat} -E{endlon}/{endlat} -Fxyzpq -W-{threshold}/{threshold} > {fo.name}")
+        project_generated = np.loadtxt(fo.name)
+        used_lons = project_generated[:, 0]
+        used_lats = project_generated[:, 1]
+        used_deps = project_generated[:, 3]
+        # used_distances = project_generated[:, 5]
+        used_mags = project_generated[:, 2]
+        used_x = project_generated[:, 4]
+
+        used_x_small = used_x[used_mags < 6]
+        used_x_large = used_x[used_mags >= 6]
+        used_deps_small = used_deps[used_mags < 6]
+        used_deps_large = used_deps[used_mags >= 6]
+        used_lons_small = used_lons[used_mags < 6]
+        used_lons_large = used_lons[used_mags >= 6]
+        used_lats_small = used_lats[used_mags < 6]
+        used_lats_large = used_lats[used_mags >= 6]
+        if(x_axis_label == "lon"):
+            fig.plot(
+                x=used_lons_small,
+                y=used_deps_small,
+                color="white",
+                style="c0.075c",
+                pen="black"
+            )
+            fig.plot(
+                x=used_lons_large,
+                y=used_deps_large,
+                color="red",
+                style="a0.3c",
+                pen="black"
+            )
+        elif(x_axis_label == "lat"):
+            fig.plot(
+                x=used_lats_small,
+                y=used_deps_small,
+                color="white",
+                style="c0.075c",
+                pen="black"
+            )
+            fig.plot(
+                x=used_lats_large,
+                y=used_deps_large,
+                color="red",
+                style="a0.3c",
+                pen="black"
+            )
+        elif(x_axis_label == "dist"):
+            fig.plot(
+                x=used_x_small,
+                y=used_deps_small,
+                color="white",
+                style="c0.075c",
+                pen="black"
+            )
+            fig.plot(
+                x=used_x_large,
+                y=used_deps_large,
+                color="red",
+                style="a0.3c",
+                pen="black"
+            )
+        fo.close()
 
     if(x_axis_label == "lon"):
         y_410 = np.zeros_like(lons)

@@ -26,6 +26,8 @@ parser_vc_post.add_argument('startlon', type=float)
 parser_vc_post.add_argument('startlat', type=float)
 parser_vc_post.add_argument('endlon', type=float)
 parser_vc_post.add_argument('endlat', type=float)
+parser_vc_post.add_argument('threshold', type=float)
+parser_vc_post.add_argument('models', type=str)
 parser_vc_post.add_argument('parameter', type=str)
 parser_vc_post.add_argument('x_axis_label', type=str)
 parser_vc_post.add_argument('depth', type=float)
@@ -82,7 +84,7 @@ class Vc(Resource):
         thetime = f"{datetime.datetime.now(eastern):%Y-%m-%d_%H-%M-%S}"
         filename = f"{ip}-{thetime}-{args['startlon']}-{args['startlat']}-{args['endlon']}-{args['endlat']}-{args['parameter']}-{args['x_axis_label']}-{args['depth']}-{args['colorbar_range'][0]}-{args['colorbar_range'][1]}"
         result = plot_vc(args['startlon'], args['startlat'],
-                         args['endlon'], args['endlat'], args['parameter'], args['x_axis_label'], args['depth'], args['colorbar_range'], filename)
+                         args['endlon'], args['endlat'], args['models'], args['parameter'], args['x_axis_label'], args['depth'], args['colorbar_range'], args['threshold'], filename)
         logger.info(f"generate vc for {ip} in {result}")
         return result
 

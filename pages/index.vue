@@ -119,6 +119,22 @@
                 <span> Configure the vertical-cross-section's plotting </span>
               </div>
               <el-form ref="formvc" :model="formvc">
+                <el-form-item label="Models">
+                  <el-select
+                    v-model="formvc.models"
+                    placeholder="Select model"
+                    :disabled="current_step !== 1"
+                  >
+                    <el-option
+                      v-for="item in vcoptions.models"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      :disabled="current_step !== 1"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="Parameter">
                   <el-select
                     v-model="formvc.parameter"
@@ -127,6 +143,22 @@
                   >
                     <el-option
                       v-for="item in vcoptions.parameter"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      :disabled="current_step !== 1"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="Plot events">
+                  <el-select
+                    v-model="formvc.threshold"
+                    placeholder="Select the distance within which to plot the events after the year 1960"
+                    :disabled="current_step !== 1"
+                  >
+                    <el-option
+                      v-for="item in vcoptions.threshold"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -223,6 +255,14 @@ export default {
   data() {
     return {
       vcoptions: {
+        models: [
+          { value: "eara2020", label: "EARA2020" },
+          {
+            value: "Initial",
+            label:
+              "Initial Model (Smoothed Embedded FWEA18, EARA2014 and S362ani)",
+          },
+        ],
         parameter: [
           { value: "vp", label: "vp" },
           { value: "vs", label: "vs" },
@@ -230,6 +270,12 @@ export default {
           { value: "vph", label: "vph" },
           { value: "vsv", label: "vsv" },
           { value: "vsh", label: "vsh" },
+        ],
+        threshold: [
+          { value: 0, label: "no plot" },
+          { value: 0.25, label: "0.25°" },
+          { value: 0.5, label: "0.5°" },
+          { value: 1.0, label: "1.0°" },
         ],
         x_axis_label: [
           { label: "Longitude", value: "lon" },
@@ -246,7 +292,9 @@ export default {
         endlat: null,
       },
       formvc: {
+        models: null,
         parameter: null,
+        threshold: null,
         x_axis_label: null,
         depth: 1000,
         colorbar_range: [-3, 3],
@@ -273,7 +321,9 @@ export default {
     },
     onclearvc() {
       this.formvc = {
+        models: null,
         parameter: null,
+        threshold: null,
         x_axis_label: null,
         depth: 1000,
         colorbar_range: [-3, 3],
