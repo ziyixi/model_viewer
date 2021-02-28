@@ -1,0 +1,21 @@
+name: model_viewer_pack
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip
+  - numpy
+  - pygmt
+  - xarray
+  - pyproj
+  - scipy
+  - obspy
+  - Shapely
+  - pytz
+  - Flask
+  - loguru
+  - pip:
+      - spherical_geometry
+      - Flask_RESTful
+      - gunicorn
+      - gevent
